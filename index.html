@@ -75,15 +75,18 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Header -->
-    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-40">
+    <!-- Header (Sticky for always-on-top total price) -->
+    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-40 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <span class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-black px-3 py-1 rounded text-sm tracking-wider">TOYOTA</span>
-                <h1 class="text-xl font-black tracking-widest text-white">VOXY <span class="text-xs font-normal text-slate-400">ESTIMATOR</span></h1>
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                <span class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-black px-2 py-1 sm:px-3 rounded text-xs sm:text-sm tracking-wider">TOYOTA</span>
+                <h1 class="text-lg sm:text-xl font-black tracking-widest text-white">VOXY <span class="hidden sm:inline-block text-xs font-normal text-slate-400 ml-1">ESTIMATOR</span></h1>
             </div>
-            <div class="text-xs text-slate-400 hidden sm:block">
-                ヴォクシー 高度お見積りシミュレーター (標準装備・排他・セット品自動連動対応)
+            
+            <!-- 常時上部表示の合計金額エリア -->
+            <div class="flex items-baseline gap-2 sm:gap-3 bg-slate-900/90 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-slate-700/50 shadow-inner ml-2">
+                <span class="text-[10px] sm:text-xs text-slate-400 font-medium">お支払総額</span>
+                <span class="text-base sm:text-xl font-black text-blue-400 font-mono" id="header-total-price">¥0</span>
             </div>
         </div>
     </header>
@@ -195,7 +198,7 @@
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-2xl sticky top-24 space-y-6">
                 
                 <h2 class="text-xl font-black text-white border-b border-slate-800 pb-4 flex items-center justify-between">
-                    <span>お見積り合計</span>
+                    <span>お見積り明細</span>
                     <span class="text-xs text-blue-400 font-normal">VOXY HV 2026.05</span>
                 </h2>
 
@@ -324,7 +327,7 @@
             { id: "mop-step", name: "ユニバーサルステップ (助手席側)", desc: "ドア開閉連動ステップ", grades: { "S-Z": { status: "option", price: 33000 }, "S-G": { status: "option", price: 33000 }, "MU": { status: "option", price: 33000 }, "WC": { status: "option", price: 33000 } } }
         ];
 
-        // 3. Dealer Options / Accessories (DOP) Database
+        // 3. Dealer Options / Accessories (DOP) Database (RESTORED FULL LIST)
         const DOPS = [
             // MODELLISTA Sets
             { id: "dop-model-aero-set-paint", category: "MODELLISTA", num: "301", name: "MODELLISTA エアロパーツセット (塗装済)", hours: 4.5, price: 220000, desc: "フロント/サイド/リヤスカート豪華メッキ仕様" },
@@ -382,9 +385,30 @@
             { id: "dop-toyota-mat-luxury", category: "純正用品", num: "05", name: "フロアマット (ラグジュアリータイプ)", hours: 0.0, price: 81950, desc: "Platinum Clear対応" },
             { id: "dop-toyota-mat-rubber", category: "純正用品", num: "028", name: "スノー・レジャー用フロアマット", hours: 0.0, price: 17600, desc: "縁高合成ラバー" },
             { id: "dop-toyota-visor", category: "純正用品", num: "020", name: "サイドバイザー (RVワイドタイプ)", hours: 0.0, price: 33000, desc: "雨天換気用" },
-            { id: "dop-tz-dr210", category: "TZ", num: "-", name: "前後方2カメラ ドライブレコーダー", hours: 0.0, price: 44220, desc: "駐車監視機能付" },
-            { id: "dop-tz-dr500", category: "TZ", num: "705", name: "前後方3カメラ ドライブレコーダー", hours: 0.3, price: 49830, desc: "車内録画対応" },
-            { id: "dop-tz-speaker", category: "TZ", num: "002", name: "プレミアムサウンド8chスピーカー", hours: 4.2, price: 113300, desc: "ヤマハ監修" }
+
+            // Sapotoyo Plus (RESTORED)
+            { id: "dop-sapotoyo-key-high", category: "サポトヨプラス", num: "030", name: "プラスサポート用スマートキー (High付車用)", hours: 0.2, price: 18810, desc: "急アクセル加速抑制機能専用キー" },
+            { id: "dop-sapotoyo-key-normal", category: "サポトヨプラス", num: "030", name: "プラスサポート用スマートキー (High無車用)", hours: 0.2, price: 16060, desc: "急アクセル加速抑制機能専用キー" },
+            { id: "dop-sapotoyo-cushion-lux", category: "サポトヨプラス", num: "065", name: "安心ドライブサポートクッション Luxury", hours: 0.0, price: 6160, desc: "スウェード調、姿勢保持クッション" },
+            { id: "dop-sapotoyo-cushion-basic", category: "サポトヨプラス", num: "065", name: "安心ドライブサポートクッション Basic", hours: 0.0, price: 4290, desc: "ニット調、姿勢保持クッション" },
+            { id: "dop-sapotoyo-grip-head", category: "サポトヨプラス", num: "901", name: "アシストグリップ (ヘッドレスト取付タイプ)", hours: 0.0, price: 16500, desc: "助手席ヘッドレスト部グレー" },
+            { id: "dop-sapotoyo-rot-cushion", category: "サポトヨプラス", num: "709", name: "回転クッション", hours: 0.0, price: 13200, desc: "乗降りをサポートする回転座布団クッション" },
+            { id: "dop-sapotoyo-grip-strap", category: "サポトヨプラス", num: "-", name: "アシストグリップ (つり革タイプ)", hours: 0.0, price: 4840, desc: "セカンドシートつり革" },
+            { id: "dop-sapotoyo-exgel", category: "サポトヨプラス", num: "711", name: "バッククッション EXGEL", hours: 0.0, price: 13200, desc: "優れた体圧分散性(加地社製)" },
+            { id: "dop-sapotoyo-toilet", category: "サポトヨプラス", num: "-", name: "非常用トイレ スマートタイプ 10回分", hours: 0.0, price: 3630, desc: "組立簡易トイレセット、耐荷重200kg" },
+            
+            // TZ / Audio Visual (RESTORED)
+            { id: "dop-tz-box", category: "TZ", num: "717", name: "ラゲージ収納ボックス", hours: 0.0, price: 7700, desc: "最大5分割、取っ手、荷物目隠しフタ付" },
+            { id: "dop-tz-base-gear", category: "TZ", num: "718", name: "シートバックベースギア", hours: 0.0, price: 7040, desc: "ヘッドレスト用マルチアタッチメント" },
+            { id: "dop-tz-holder-drv", category: "TZ", num: "702", name: "エアコンドリンクホルダー (運転席用)", hours: 0.0, price: 3982, desc: "エアコン送風口取付専用設計" },
+            { id: "dop-tz-holder-asst", category: "TZ", num: "702", name: "エアコンドリンクホルダー (助手席用)", hours: 0.0, price: 3982, desc: "助手席エアコン送風口取付" },
+            { id: "dop-tz-film-10", category: "TZ", num: "705", name: "TZマルチファンクションフィルム 10.5インチ用", hours: 0.3, price: 4840, desc: "ナビ画面液晶保護フィルム" },
+            { id: "dop-tz-film-8", category: "TZ", num: "705", name: "TZマルチファンクションフィルム 8インチ用", hours: 0.1, price: 4730, desc: "8インチナビ用保護フィルム" },
+            { id: "dop-tz-emergency", category: "TZ", num: "706", name: "TZ緊急セット 車中泊避難用", hours: 0.0, price: 19800, desc: "防災士監修、防水リュック等計20点" },
+            { id: "dop-tz-dr210", category: "TZ", num: "-", name: "前後方2カメラ ドライブレコーダー TZ-DR210", hours: 0.0, price: 44220, desc: "駐車監視機能付" },
+            { id: "dop-tz-dr500", category: "TZ", num: "705", name: "前後方3カメラ ドライブレコーダー TZ-DR500", hours: 0.3, price: 49830, desc: "車内録画対応" },
+            { id: "dop-tz-speaker", category: "TZ", num: "002", name: "プレミアムサウンド8chスピーカー", hours: 4.2, price: 113300, desc: "ヤマハ監修" },
+            { id: "dop-tz-rear-display", category: "TZ", num: "003", name: "13.2型有機EL後席ディスプレイ V13T-R72R", hours: 0.0, price: 140800, desc: "背面アクチュエーター搭載、13.2型高コントラスト有機ELモニター" }
         ];
 
         // 4. State Management
@@ -742,7 +766,12 @@
             document.getElementById("summary-dop-price").innerText = `¥${dopPrice.toLocaleString()}`;
             document.getElementById("summary-total-hours").innerText = `${totalHours.toFixed(1)} H`;
             document.getElementById("summary-labor-fee").innerText = `¥${laborFee.toLocaleString()}`;
+            
             document.getElementById("summary-total-price").innerText = `¥${grandTotal.toLocaleString()}`;
+            
+            // Header total update
+            const headerTotalEl = document.getElementById("header-total-price");
+            if(headerTotalEl) headerTotalEl.innerText = `¥${grandTotal.toLocaleString()}`;
         }
 
         // 10. PDF出力 (印刷直前にDOMを生成)
