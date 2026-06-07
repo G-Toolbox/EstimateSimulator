@@ -75,18 +75,15 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Header (Sticky for always-on-top total price) -->
-    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-40 shadow-md">
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-                <span class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-black px-2 py-1 sm:px-3 rounded text-xs sm:text-sm tracking-wider">TOYOTA</span>
-                <h1 class="text-lg sm:text-xl font-black tracking-widest text-white">VOXY <span class="hidden sm:inline-block text-xs font-normal text-slate-400 ml-1">ESTIMATOR</span></h1>
+            <div class="flex items-center gap-3">
+                <span class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-black px-3 py-1 rounded text-sm tracking-wider">TOYOTA</span>
+                <h1 class="text-xl font-black tracking-widest text-white">VOXY <span class="text-xs font-normal text-slate-400">ESTIMATOR</span></h1>
             </div>
-            
-            <!-- 常時上部表示の合計金額エリア -->
-            <div class="flex items-baseline gap-2 sm:gap-3 bg-slate-900/90 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-slate-700/50 shadow-inner ml-2">
-                <span class="text-[10px] sm:text-xs text-slate-400 font-medium">お支払総額</span>
-                <span class="text-base sm:text-xl font-black text-blue-400 font-mono" id="header-total-price">¥0</span>
+            <div class="text-xs text-slate-400 hidden sm:block">
+                ヴォクシー 高度お見積りシミュレーター (標準装備・排他・セット品自動連動対応)
             </div>
         </div>
     </header>
@@ -198,7 +195,7 @@
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-2xl sticky top-24 space-y-6">
                 
                 <h2 class="text-xl font-black text-white border-b border-slate-800 pb-4 flex items-center justify-between">
-                    <span>お見積り明細</span>
+                    <span>お見積り合計</span>
                     <span class="text-xs text-blue-400 font-normal">VOXY HV 2026.05</span>
                 </h2>
 
@@ -327,7 +324,7 @@
             { id: "mop-step", name: "ユニバーサルステップ (助手席側)", desc: "ドア開閉連動ステップ", grades: { "S-Z": { status: "option", price: 33000 }, "S-G": { status: "option", price: 33000 }, "MU": { status: "option", price: 33000 }, "WC": { status: "option", price: 33000 } } }
         ];
 
-        // 3. Dealer Options / Accessories (DOP) Database (RESTORED FULL LIST)
+        // 3. Dealer Options / Accessories (DOP) Database
         const DOPS = [
             // MODELLISTA Sets
             { id: "dop-model-aero-set-paint", category: "MODELLISTA", num: "301", name: "MODELLISTA エアロパーツセット (塗装済)", hours: 4.5, price: 220000, desc: "フロント/サイド/リヤスカート豪華メッキ仕様" },
@@ -374,7 +371,8 @@
             { id: "dop-gr-visor", category: "GR PARTS", num: "506", name: "GRスポーツサイドバイザー", hours: 0.4, price: 27500, desc: "空力換気性能を高めるフィン付" },
             { id: "dop-gr-wheel-18", category: "GR PARTS", num: "507", name: "GR18インチアルミホイール&タイヤセット", hours: 0.5, price: 316800, desc: "ブラックマイカ仕様" },
             { id: "dop-gr-brace", category: "GR PARTS", num: "508", name: "GRドアスタビライザー&GRブレースセット", hours: 2.0, price: 33000, desc: "2WD用剛性アップ" },
-            // Toyota
+            
+            // Toyota Genuine Accessories (RESTORED ALL ITEMS)
             { id: "dop-toyota-fin", category: "純正用品", num: "061", name: "士別フィン", hours: 0.6, price: 20460, desc: "底面気流整理フィン" },
             { id: "dop-toyota-curtain-sh", category: "純正用品", num: "-", name: "室内カーテン (遮光機能付)", hours: 0.0, price: 81950, desc: "遮光率1級ブラック" },
             { id: "dop-toyota-curtain-pl", category: "純正用品", num: "-", name: "室内カーテン (プリーツタイプ)", hours: 0.0, price: 70950, desc: "消臭プリーツブラック" },
@@ -385,8 +383,20 @@
             { id: "dop-toyota-mat-luxury", category: "純正用品", num: "05", name: "フロアマット (ラグジュアリータイプ)", hours: 0.0, price: 81950, desc: "Platinum Clear対応" },
             { id: "dop-toyota-mat-rubber", category: "純正用品", num: "028", name: "スノー・レジャー用フロアマット", hours: 0.0, price: 17600, desc: "縁高合成ラバー" },
             { id: "dop-toyota-visor", category: "純正用品", num: "020", name: "サイドバイザー (RVワイドタイプ)", hours: 0.0, price: 33000, desc: "雨天換気用" },
+            { id: "dop-toyota-projector", category: "純正用品", num: "018", name: "プロジェクションイルミネーション", hours: 1.5, price: 25300, desc: "ドアトリム下部から車名ロゴを路面に投影、フロント左右" },
+            { id: "dop-toyota-illumi-white", category: "純正用品", num: "-", name: "インテリアイルミネーション (ホワイト)", hours: 1.3, price: 22000, desc: "ドアオープン時ホワイト間接照明、フロント足元" },
+            { id: "dop-toyota-protect-door", category: "純正用品", num: "025", name: "プロテクションフィルム (ドアハンドル)", hours: 0.5, price: 8250, desc: "透明ウレタンフィルム、爪傷防止、フロント・リヤ計4枚" },
+            { id: "dop-toyota-ceiling-light", category: "純正用品", num: "062", name: "クリーンシーリングライト (ナノイーX搭載)", hours: 0.0, price: 36300, desc: "面発光＋間接光＋ナノイーX搭載、ホワイトまたはダークシルバー" },
+            { id: "dop-toyota-fence", category: "純正用品", num: "008", name: "ラゲージフェンス", hours: 0.0, price: 16500, desc: "荷崩れ・転倒防止フェンス、樹脂(EVA)製" },
+            { id: "dop-toyota-box", category: "純正用品", num: "009", name: "ラゲージボックス", hours: 0.0, price: 16500, desc: "折りたたみ収納可能、ネット付" },
+            { id: "dop-toyota-soft-tray", category: "純正用品", num: "010", name: "ラゲージソフトトレイ", hours: 0.0, price: 17600, desc: "撥水・防水・滑り止め加工、車名ロゴ入" },
+            { id: "dop-toyota-remote-start", category: "純正用品", num: "032", name: "リモートスタート", hours: 0.0, price: 57200, desc: "離れた場所からエンジンを始動し空調を作動" },
+            { id: "dop-toyota-mirror-water", category: "純正用品", num: "026", name: "レインクリアリングブルーミラー", hours: 0.0, price: 19800, desc: "雨天時親水ブルーミラー、左右" },
+            { id: "dop-toyota-mirror-reverse", category: "純正用品", num: "127", name: "リバース連動ミラー", hours: 0.0, price: 25850, desc: "後退時助手席ミラー連動" },
+            { id: "dop-toyota-lock-handle", category: "純正用品", num: "064", name: "ハンドルロック", hours: 0.0, price: 29700, desc: "特殊鋼製、キー式、レッド警告色" },
+            { id: "dop-toyota-lock-wheel", category: "純正用品", num: "063", name: "カーロック", hours: 0.0, price: 49500, desc: "ホイール固定防犯ロック、ラバー保護" },
 
-            // Sapotoyo Plus (RESTORED)
+            // Sapotoyo Plus
             { id: "dop-sapotoyo-key-high", category: "サポトヨプラス", num: "030", name: "プラスサポート用スマートキー (High付車用)", hours: 0.2, price: 18810, desc: "急アクセル加速抑制機能専用キー" },
             { id: "dop-sapotoyo-key-normal", category: "サポトヨプラス", num: "030", name: "プラスサポート用スマートキー (High無車用)", hours: 0.2, price: 16060, desc: "急アクセル加速抑制機能専用キー" },
             { id: "dop-sapotoyo-cushion-lux", category: "サポトヨプラス", num: "065", name: "安心ドライブサポートクッション Luxury", hours: 0.0, price: 6160, desc: "スウェード調、姿勢保持クッション" },
@@ -397,7 +407,7 @@
             { id: "dop-sapotoyo-exgel", category: "サポトヨプラス", num: "711", name: "バッククッション EXGEL", hours: 0.0, price: 13200, desc: "優れた体圧分散性(加地社製)" },
             { id: "dop-sapotoyo-toilet", category: "サポトヨプラス", num: "-", name: "非常用トイレ スマートタイプ 10回分", hours: 0.0, price: 3630, desc: "組立簡易トイレセット、耐荷重200kg" },
             
-            // TZ / Audio Visual (RESTORED)
+            // TZ / Audio Visual
             { id: "dop-tz-box", category: "TZ", num: "717", name: "ラゲージ収納ボックス", hours: 0.0, price: 7700, desc: "最大5分割、取っ手、荷物目隠しフタ付" },
             { id: "dop-tz-base-gear", category: "TZ", num: "718", name: "シートバックベースギア", hours: 0.0, price: 7040, desc: "ヘッドレスト用マルチアタッチメント" },
             { id: "dop-tz-holder-drv", category: "TZ", num: "702", name: "エアコンドリンクホルダー (運転席用)", hours: 0.0, price: 3982, desc: "エアコン送風口取付専用設計" },
